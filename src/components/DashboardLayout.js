@@ -18,7 +18,8 @@ import {
     ChevronRight,
     Image as ImageIcon,
     Menu,
-    X
+    X,
+    ShoppingBag
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, href, active, badge, onClick }) => (
@@ -77,61 +78,65 @@ export default function DashboardLayout({ children }) {
     return (
         <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-inter">
             {/* Header */}
-            <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sticky top-0 z-[60] shadow-sm shadow-slate-100/50">
-                <div className="flex items-center gap-4">
+            <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-6 sticky top-0 z-[60] shadow-sm shadow-slate-100/30">
+                <div className="flex items-center gap-6">
                     <button 
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 lg:hidden"
+                        className="p-2 hover:bg-slate-50 rounded-xl text-slate-400 lg:hidden transition-colors"
                     >
                         {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                     
                     <div className="flex items-center gap-2">
-                        <Link href="/" className="flex items-center gap-1.5">
+                        <Link href="/" className="flex items-center gap-2 group">
+                            <div className="w-10 h-10 bg-[#0A66C2] rounded-xl flex items-center justify-center shadow-lg shadow-blue-100 group-hover:rotate-6 transition-transform">
+                                <span className="text-white font-black text-xl">S</span>
+                            </div>
                             <span className="text-xl font-black text-[#0f1729] tracking-tighter">
                                 selleryaari<span className="text-[#0A66C2]">.</span>
-                            </span>
-                            <span className="bg-[#FFF7E6] text-[#FAAD14] text-[9px] font-black px-1.5 py-0.5 rounded border border-[#FFE7BA] uppercase">
-                                Marketplace
                             </span>
                         </Link>
                     </div>
                 </div>
 
-                <div className="flex-1 max-w-xl mx-8 hidden md:block">
-                    <div className="relative flex items-center group">
+                <div className="flex-1 max-w-2xl mx-12 hidden lg:block">
+                    <div className="relative flex items-center">
                         <div className="relative flex-1">
                             <input
                                 type="text"
-                                placeholder="Search Products (e.g. Magic Book, Bedsheet etc.)"
-                                className="w-full bg-[#F5F5F5] border border-transparent rounded-l-lg py-2 px-10 text-[13px] focus:bg-white focus:border-[#0A66C2]/20 focus:ring-4 focus:ring-[#0A66C2]/5 transition-all"
+                                placeholder="Search Products (e.g. Magic Book, Kitchen Tools etc.)"
+                                className="w-full bg-[#F8FAFC] border border-slate-100 rounded-l-2xl py-3 px-12 text-[13px] font-medium focus:bg-white focus:border-[#0A66C2] focus:ring-4 focus:ring-[#0A66C2]/5 transition-all outline-none"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
-                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-[#0A66C2]" />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 cursor-pointer">
-                                <ImageIcon size={18} />
-                            </div>
+                            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
                         </div>
-                        <button className="bg-[#0f1729] hover:bg-[#1a2641] text-white px-5 py-2 rounded-r-lg flex items-center gap-2 text-[13px] font-bold transition-colors">
+                        <button className="bg-[#0f1729] hover:bg-[#0A66C2] text-white px-8 py-3 rounded-r-2xl text-[13px] font-black transition-all shadow-lg shadow-slate-200">
                             Search
                         </button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 sm:gap-5">
-                    <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-full relative transition-colors">
-                        <Bell size={20} />
-                        <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                    </button>
-                    <button className="p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
-                        <User size={20} />
-                    </button>
-                    <button className="hidden sm:flex bg-[#F9F0FF] text-[#722ED1] border border-[#D3ADF7] px-3 py-1.5 rounded-lg text-[12px] font-bold items-center gap-2 hover:bg-[#f3e5ff] transition-all active:scale-95">
-                        <div className="w-4 h-4 bg-[#722ED1] rounded-full flex items-center justify-center">
-                            <span className="text-white text-[9px] font-bold">↑</span>
-                        </div>
-                        Upgrade
+                <div className="flex items-center gap-4 sm:gap-6">
+                    <div className="hidden md:flex items-center gap-6 mr-2">
+                        <Link href="#" className="text-[13px] font-black text-slate-500 hover:text-[#0A66C2] transition-colors uppercase tracking-widest">About</Link>
+                        <Link href="#" className="text-[13px] font-black text-slate-500 hover:text-[#0A66C2] transition-colors uppercase tracking-widest">Support</Link>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <button className="hidden sm:flex text-[13px] font-black text-[#0f1729] px-4 py-2 hover:bg-slate-50 rounded-xl transition-all">
+                            LOGIN
+                        </button>
+                        <button className="bg-[#FAAD14] hover:bg-[#d48806] text-white px-6 py-2.5 rounded-xl text-[12px] font-black transition-all shadow-lg shadow-yellow-100 active:scale-95">
+                            REGISTER
+                        </button>
+                    </div>
+
+                    <div className="h-8 w-[1px] bg-slate-100 mx-2 hidden sm:block" />
+
+                    <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-xl relative transition-all group">
+                        <ShoppingBag size={22} className="group-hover:text-[#0A66C2]" />
+                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#0A66C2] text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center">0</span>
                     </button>
                 </div>
             </header>

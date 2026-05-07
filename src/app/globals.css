@@ -3,18 +3,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0A66C2;
-  --color-primary-dark: #0855a5;
-  --color-primary-light: #3b8fe8;
-  --color-secondary: #f8fafc;
-  --color-accent: #722ED1;
+  --color-primary: #F4BC1C;
+  --color-primary-dark: #D4A017;
+  --color-primary-light: #FFD700;
+  --color-secondary: #000000;
+  --color-accent: #F4BC1C;
   --font-inter: "Inter", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
   --font-poppins: "Poppins", sans-serif;
 }
 
 @layer base {
   body {
-    @apply font-inter text-[#0f1729] bg-white antialiased;
+    @apply font-inter text-[#1a1a1a] bg-white antialiased;
   }
   
   html {
@@ -24,23 +25,23 @@
 
 @layer components {
   .container {
-    @apply mx-auto px-4 sm:px-6 max-w-[1400px];
+    @apply mx-auto px-4 max-w-[1440px];
   }
 
   .btn-primary {
-    @apply inline-flex items-center gap-2 bg-[#0f1729] text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all duration-300 shadow-xl shadow-slate-200 hover:-translate-y-1 hover:bg-[#1a2641] active:scale-95 cursor-pointer;
+    @apply inline-flex items-center gap-2 bg-[#F4BC1C] text-black px-6 py-2.5 rounded-lg font-bold text-[13px] transition-all duration-300 shadow-sm hover:bg-[#D4A017] active:scale-95 cursor-pointer;
   }
 
   .premium-card {
-    @apply bg-white border border-slate-100 rounded-[32px] shadow-2xl shadow-slate-200/40 overflow-hidden;
+    @apply bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-lg hover:shadow-slate-200/30 transition-all duration-300 overflow-hidden;
   }
 
   .gradient-text {
-    @apply bg-linear-to-r from-[#0f1729] to-[#0A66C2] bg-clip-text text-transparent;
+    @apply bg-linear-to-r from-black to-[#F4BC1C] bg-clip-text text-transparent;
   }
 
   .section-badge {
-    @apply inline-block bg-[#F9F0FF] text-[#722ED1] text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border border-[#D3ADF7] mb-6;
+    @apply inline-block bg-[#FFFBE6] text-[#D4A017] text-[9px] font-bold uppercase tracking-[0.1em] px-3 py-1 rounded border border-[#FFE58F] mb-4;
   }
 }
 
