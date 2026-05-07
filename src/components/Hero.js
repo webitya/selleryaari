@@ -1,106 +1,120 @@
 'use client';
-import { motion } from 'framer-motion';
-import { Rocket, ShieldCheck, Zap, ArrowRight, TrendingUp, Search, IndianRupee } from 'lucide-react';
+import { Rocket, ShieldCheck, Zap, ArrowRight, TrendingUp, IndianRupee, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
+
+const stats = [
+    { value: '5,000+', label: 'Active Sellers' },
+    { value: '₹4.2Cr', label: 'GMV Processed' },
+    { value: '7 Days', label: 'Avg. Launch Time' },
+];
+
+const badges = [
+    { icon: ShieldCheck, label: 'Verified Suppliers' },
+    { icon: Zap, label: '7-Day Setup' },
+    { icon: CheckCircle2, label: 'GST Compliant' },
+];
 
 export default function Hero() {
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden bg-gradient-to-b from-[#f0f6ff] to-white">
-      {/* Decorative circles */}
-      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#e8f1fb] rounded-full blur-3xl opacity-60 -z-10" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[50%] bg-[#d0e6f8] rounded-full blur-3xl opacity-40 -z-10" />
+    <section className="relative bg-white overflow-hidden font-inter border-b border-slate-100">
+      {/* Subtle grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:48px_48px] opacity-40 -z-10" />
+      <div className="absolute top-0 right-0 w-[40%] h-full bg-gradient-to-l from-[#FFFBE6]/60 to-transparent -z-10" />
 
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="flex-1 text-center lg:text-left"
-          >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-[#0f1729] leading-[1.1] mb-6">
-              Launch & Scale Your <br />
-              <span className="gradient-text">E-commerce Business</span>
+      <div className="max-w-[1440px] mx-auto px-6 py-12 lg:py-16">
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+          {/* Left — Copy */}
+          <div className="flex-1 text-center lg:text-left">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#FFFBE6] text-[#D4A017] text-[10px] font-bold px-3 py-1 rounded-full border border-[#FFE58F] uppercase tracking-widest mb-5">
+              <Zap size={10} fill="#D4A017" />
+              India's #1 Dropshipping Partner
+            </div>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#1a1a1a] leading-[1.1] mb-5 tracking-tight">
+              Launch & Scale Your<br />
+              <span className="text-[#F4BC1C]">E-commerce Business</span>
             </h1>
-            <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto lg:mx-0">
-              From high-margin product research to full Shopify store setup and legal GST registration — we handle the complexity so you can focus on selling.
+
+            <p className="text-slate-500 text-[14px] font-medium mb-7 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              From high-margin product research to full store setup and GST registration — we handle the complexity so you can focus on selling.
             </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-              <Link href="#contact" className="btn-primary">
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-8">
+              <Link href="#contact" className="bg-[#F4BC1C] hover:bg-[#D4A017] text-black px-6 py-3 rounded-xl font-bold text-[13px] flex items-center gap-2 transition-all active:scale-95 shadow-md shadow-yellow-100 uppercase tracking-wider">
                 Book Free Consultation
-                <Rocket size={18} />
+                <Rocket size={15} />
               </Link>
-              <Link href="#products" className="btn-outline">
-                View Winning Products
-                <ArrowRight size={18} />
+              <Link href="#products" className="border border-slate-200 hover:border-[#F4BC1C] bg-white text-[#1a1a1a] px-6 py-3 rounded-xl font-bold text-[13px] flex items-center gap-2 transition-all active:scale-95 uppercase tracking-wider hover:text-[#D4A017]">
+                View Products
+                <ArrowRight size={15} />
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap justify-center lg:justify-start items-center gap-6 text-sm font-medium text-slate-500">
-              <div className="flex items-center gap-2">
-                <ShieldCheck size={18} className="text-[#0A66C2]" />
-                <span>Verified Suppliers</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Zap size={18} className="text-[#0A66C2]" />
-                <span>Fast 7-Day Setup</span>
+            {/* Trust badges */}
+            <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4">
+              {badges.map((b, i) => (
+                <div key={i} className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                  <b.icon size={13} className="text-[#F4BC1C]" />
+                  {b.label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — Visual Dashboard */}
+          <div className="flex-1 w-full max-w-lg relative">
+            {/* Main card */}
+            <div className="bg-[#1a1a1a] rounded-2xl p-1.5 shadow-2xl shadow-slate-300/40">
+              <div className="bg-white rounded-xl overflow-hidden">
+                <div className="h-7 bg-[#F9F9F9] flex items-center gap-1.5 px-3 border-b border-slate-100">
+                  <div className="w-2 h-2 rounded-full bg-red-400" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                  <div className="w-2 h-2 rounded-full bg-green-400" />
+                  <span className="ml-2 text-[9px] text-slate-400 font-medium">selleryaari.in/dashboard</span>
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
+                  alt="SellerYaari Dashboard"
+                  className="w-full h-auto object-cover aspect-video"
+                />
               </div>
             </div>
-          </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex-1 relative"
-          >
-            <div className="relative z-10 p-2 animate-float">
-              {/* MacBook style frame */}
-              <div className="bg-[#0f1729] rounded-2xl p-1.5 shadow-2xl border border-slate-700/50">
-                <div className="bg-white rounded-xl overflow-hidden border border-slate-200">
-                  <div className="h-6 bg-slate-50 flex items-center gap-1.5 px-3 border-b border-slate-100">
-                    <div className="w-2 h-2 rounded-full bg-[#ff5f56]" />
-                    <div className="w-2 h-2 rounded-full bg-[#ffbd2e]" />
-                    <div className="w-2 h-2 rounded-full bg-[#27c93f]" />
-                  </div>
-                  <img 
-                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426" 
-                    alt="SellerYaari E-commerce Dashboard"
-                    className="w-full h-auto object-cover aspect-video"
-                  />
-                </div>
+            {/* Floating stat — top right */}
+            <div className="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-lg shadow-slate-200/50 hidden md:flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                <TrendingUp size={15} className="text-emerald-500" />
               </div>
-              
-              {/* Floating element 1 */}
-              <div className="absolute -top-6 -right-6 glass-card p-4 animate-pulse hidden md:block">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                    <TrendingUp size={16} />
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-slate-500 font-bold uppercase">Daily Revenue</div>
-                    <div className="text-sm font-bold text-[#0f1729]">₹24,800</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating element 2 */}
-              <div className="absolute -bottom-10 -left-6 glass-card p-4 hidden md:block">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[#0A66C2]">
-                    <IndianRupee size={16} />
-                  </div>
-                  <div className="text-xs font-bold text-slate-700">Hero Product Found!</div>
-                </div>
+              <div>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">Daily Revenue</p>
+                <p className="text-[15px] font-black text-[#1a1a1a] leading-none mt-0.5">₹24,800</p>
               </div>
             </div>
-            
-            {/* Soft decorative Glow behind the image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-blue-500/10 blur-[120px] -z-10 rounded-full" />
-          </motion.div>
+
+            {/* Floating stat — bottom left */}
+            <div className="absolute -bottom-4 -left-4 bg-white border border-slate-100 rounded-xl px-4 py-3 shadow-lg shadow-slate-200/50 hidden md:flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#FFFBE6] flex items-center justify-center">
+                <IndianRupee size={15} className="text-[#D4A017]" />
+              </div>
+              <div>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none">Hero Product Found!</p>
+                <p className="text-[13px] font-black text-[#1a1a1a] leading-none mt-0.5">+347% ROI</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Bar */}
+        <div className="mt-12 pt-8 border-t border-slate-100 grid grid-cols-3 gap-6 max-w-lg mx-auto lg:mx-0">
+          {stats.map((s, i) => (
+            <div key={i} className="text-center lg:text-left">
+              <p className="text-xl font-black text-[#1a1a1a] tracking-tight">{s.value}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{s.label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
