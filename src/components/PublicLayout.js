@@ -43,8 +43,7 @@ export default function PublicLayout({ children }) {
                         </div>
                     </div>
                     <div className="flex gap-4">
-                        <Link href="/track" className="hover:text-[#F4BC1C] transition-colors">Track</Link>
-                        {!session && <Link href="/admin/login" className="hover:text-[#F4BC1C] transition-colors">Seller Login</Link>}
+                        <Link href="/track" className="hover:text-[#F4BC1C] transition-colors">Track Order</Link>
                     </div>
                 </div>
             </div>
@@ -147,7 +146,7 @@ export default function PublicLayout({ children }) {
                                 )}
                             </div>
                         ) : (
-                            <Link href="/auth/login" className="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-all hidden sm:flex items-center gap-1.5">
+                            <Link href="/auth/login" className="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-all flex items-center gap-1.5">
                                 <User size={16} />
                                 <span className="text-[11px] font-bold uppercase">Login</span>
                             </Link>
@@ -212,7 +211,7 @@ export default function PublicLayout({ children }) {
                             <ul className="space-y-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                                 <li><Link href="/#about" className="hover:text-white transition-colors">About Us</Link></li>
                                 <li><Link href="/#services" className="hover:text-white transition-colors">Services</Link></li>
-                                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                                <li><Link href="/admin/login" className="hover:text-white transition-colors">Admin Portal</Link></li>
                             </ul>
                         </div>
                         <div>

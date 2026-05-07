@@ -1,4 +1,6 @@
 'use client';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import AdminLayout from '@/components/AdminLayout';
 import { 
     Users, 
@@ -8,7 +10,8 @@ import {
     Clock,
     TrendingDown,
     ShoppingBag,
-    Zap
+    Zap,
+    User as UserIcon
 } from 'lucide-react';
 
 const StatCard = ({ name, value, icon: Icon, change, color, bg }) => (
@@ -30,12 +33,34 @@ const StatCard = ({ name, value, icon: Icon, change, color, bg }) => (
 );
 
 export default function Dashboard() {
-  const stats = [
-    { name: 'Total Leads', value: '1,248', icon: Users, change: '+12.5%', color: 'text-blue-500', bg: 'bg-blue-50' },
-    { name: 'Active Products', value: '86', icon: Package, change: '+4.2%', color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { name: 'Conversion Rate', value: '18.4%', icon: TrendingUp, change: '+2.1%', color: 'text-[#D4A017]', bg: 'bg-[#FFFBE6]' },
-    { name: 'Orders Today', value: '34', icon: ShoppingBag, change: '-3.5%', color: 'text-orange-500', bg: 'bg-orange-50' },
-  ];
+  const [stats, setStats] = useState([
+    { name: 'Total Leads', value: '0', icon: Users, change: '+0%', color: 'text-blue-500', bg: 'bg-blue-50', key: 'leads' },
+    { name: 'Active Products', value: '0', icon: Package, change: '+0%', color: 'text-emerald-500', bg: 'bg-emerald-50', key: 'products' },
+    { name: 'Total Merchants', value: '0', icon: UserIcon, change: '+0%', color: 'text-[#D4A017]', bg: 'bg-[#FFFBE6]', key: 'users' },
+    { name: 'Conversion Rate', value: '12.5%', icon: TrendingUp, change: '+2.1%', color: 'text-orange-500', bg: 'bg-orange-50', key: 'rate' },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+        try {
+            const [leads, products, users] = await Promise.all([
+                axios.get('/api/leads'),
+                axios.get('/api/products'),
+                axios.get('/api/admin/users')
+            ]);
+            
+            setStats(prev => prev.map(s => {
+                if (s.key === 'leads') return { ...s, value: leads.data.length.toLocaleString() };
+                if (s.key === 'products') return { ...s, value: products.data.length.toLocaleString() };
+                if (s.key === 'users') return { ...s, value: users.data.length.toLocaleString() };
+                return s;
+            }));
+        } catch (err) {
+            console.error('Failed to fetch stats');
+        }
+    };
+    fetchStats();
+  }, []);
 
   return (
     <AdminLayout>

@@ -18,18 +18,18 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        await dbConnect();
-        
-        // 1. Check for Admin first
-        const adminEmail = process.env.ADMIN_EMAIL;
-        const adminPassword = process.env.ADMIN_PASSWORD;
+        try {
+          // 1. Check for Admin first (No DB needed)
+          const adminEmail = process.env.ADMIN_EMAIL;
+          const adminPassword = process.env.ADMIN_PASSWORD;
 
-        if (credentials.email === adminEmail && credentials.password === adminPassword) {
-          return { id: 'admin-id', name: 'Admin', email: adminEmail, role: 'admin' };
-        }
+          if (credentials.email === adminEmail && credentials.password === adminPassword) {
+            return { id: 'admin-id', name: 'Admin', email: adminEmail, role: 'admin' };
+          }
 
-        // 2. Check for User in DB
-        const user = await User.findOne({ email: credentials.email });
+          // 2. Check for User in DB
+          await dbConnect();
+          const user = await User.findOne({ email: credentials.email });
         if (!user) throw new Error('No user found');
         if (!user.isVerified) throw new Error('Please verify your email first');
 
@@ -37,6 +37,10 @@ export const authOptions = {
         if (!isValid) throw new Error('Invalid password');
 
         return { id: user._id, name: user.name, email: user.email, role: user.role };
+        } catch (error) {
+          console.error('Auth error:', error);
+          return null;
+        }
       },
     }),
   ],

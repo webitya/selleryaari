@@ -81,6 +81,7 @@ export default function AdminLayout({ children }) {
     { name: 'Dashboard', icon: LayoutDashboard, href: '/admin/dashboard' },
     { name: 'Products', icon: Package, href: '/admin/products' },
     { name: 'Leads', icon: Users, href: '/admin/leads' },
+    { name: 'Registered Users', icon: UserIcon, href: '/admin/users' },
   ];
 
   return (
