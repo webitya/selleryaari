@@ -14,6 +14,7 @@ export default function AdminProducts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [search, setSearch] = useState('');
+  const [deletingIds, setDeletingIds] = useState(new Set());
   const [formData, setFormData] = useState({
     name: '', description: '', price: '', originalPrice: '', category: 'Tech', images: [''], tags: '', isWinner: false
   });
@@ -49,20 +50,24 @@ export default function AdminProducts() {
     try {
       const finalCategory = showNewCategory ? newCategoryName : formData.category;
       
-      const data = {
-        ...formData,
+      // DEEP FIX: Explicitly construct payload to avoid property bleeding
+      const payload = {
+        name: formData.name,
+        description: formData.description,
+        price: Number(formData.price) || 0,
+        originalPrice: formData.originalPrice ? Number(formData.originalPrice) : null,
         category: finalCategory || 'Other',
+        images: formData.images,
         tags: typeof formData.tags === 'string' ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : formData.tags,
-        price: Number(formData.price),
-        originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined
+        isWinner: Boolean(formData.isWinner)
       };
       
       if (editingId) {
-        await axios.put(`/api/products/${editingId}`, data);
-        toast.success('Product updated!');
+        await axios.put(`/api/products/${editingId}`, payload);
+        toast.success('System Updated');
       } else {
-        await axios.post('/api/products', data);
-        toast.success('Product added!');
+        await axios.post('/api/products', payload);
+        toast.success('Product Published');
       }
       
       setIsModalOpen(false);
@@ -95,13 +100,24 @@ export default function AdminProducts() {
 
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this product?')) return;
+    if (deletingIds.has(id)) return;
+    if (!window.confirm('PERMANENTLY DELETE THIS ASSET?')) return;
+    
+    setDeletingIds(prev => new Set(prev).add(id));
+    const toastId = toast.loading('Purging Asset...');
+    
     try {
       await axios.delete(`/api/products/${id}`);
-      toast.success('Product deleted');
+      toast.success('Asset Purged Successfully', { id: toastId });
       fetchProducts();
     } catch (err) {
-      toast.error('Failed to delete');
+      toast.error('Purge Failed: System Conflict', { id: toastId });
+    } finally {
+      setDeletingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -241,10 +257,12 @@ export default function AdminProducts() {
                                 </td>
                                 <td className="px-4 py-3 text-center">
                                     <span className="text-[11px] font-bold text-slate-300 line-through">
-                                        {product.originalPrice ? `₹${product.originalPrice.toLocaleString()}` : '—'}
+                                        {(product.originalPrice && product.originalPrice > 0) ? `₹${Number(product.originalPrice).toLocaleString()}` : '—'}
                                     </span>
                                 </td>
-                                <td className="px-4 py-3 text-center font-black text-[#1a1a1a] text-[13px]">₹{product.price?.toLocaleString()}</td>
+                                <td className="px-4 py-3 text-center font-black text-black text-[13px]">
+                                    ₹{Number(product.price || 0).toLocaleString()}
+                                </td>
 
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-center gap-1.5">
@@ -261,10 +279,11 @@ export default function AdminProducts() {
                                             <Edit2 size={13} />
                                         </button>
                                         <button 
+                                            disabled={deletingIds.has(product._id)}
                                             onClick={() => handleDelete(product._id)}
-                                            className="p-1.5 hover:bg-red-50 rounded-lg text-slate-300 hover:text-red-500 transition-colors"
+                                            className="p-2 hover:bg-red-50 rounded-lg text-slate-300 hover:text-red-500 transition-all active:scale-90 disabled:opacity-30"
                                         >
-                                            <Trash2 size={13} />
+                                            {deletingIds.has(product._id) ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
                                         </button>
                                     </div>
                                 </td>
@@ -311,11 +330,12 @@ export default function AdminProducts() {
                                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-[12px] font-bold">₹</span>
                                 <input 
                                     type="number" 
-                                    className="w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-8 pr-4 text-[13px] font-bold text-slate-400 focus:ring-1 focus:ring-black focus:border-black outline-none transition-all" 
+                                    className={`w-full bg-white border border-slate-200 rounded-xl py-2.5 pl-8 pr-4 text-[13px] font-bold focus:ring-1 focus:ring-black focus:border-black outline-none transition-all ${formData.originalPrice ? 'text-slate-900' : 'text-slate-400'}`} 
                                     value={formData.originalPrice} 
                                     onChange={e => setFormData({...formData, originalPrice: e.target.value})} 
                                     placeholder="0.00" 
                                 />
+
                             </div>
                         </div>
 

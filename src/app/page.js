@@ -1,6 +1,8 @@
 'use client';
 import PublicLayout from '@/components/PublicLayout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
 import { 
     ChevronRight,
     ArrowRight,
@@ -13,19 +15,17 @@ import {
     Headphones,
     Users,
     CheckCircle2,
-    PlayCircle
+    PlayCircle,
+    Image as ImageIcon
 } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
 
 import Image from 'next/image';
-import Link from 'next/link';
 import Services from '@/components/Services';
 import Process from '@/components/Process';
 import FAQ from '@/components/FAQ';
 import LeadForm from '@/components/LeadForm';
-import { useEffect } from 'react';
-import axios from 'axios';
 
 
 // --- Sub-components ---
