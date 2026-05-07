@@ -50,24 +50,30 @@ export default function AdminProducts() {
     try {
       const finalCategory = showNewCategory ? newCategoryName : formData.category;
       
-      // DEEP FIX: Explicitly construct payload to avoid property bleeding
+      // ATOMIC FIX: Ensure numeric types are cast and null is handled for empty strings
       const payload = {
-        name: formData.name,
-        description: formData.description,
-        price: Number(formData.price) || 0,
-        originalPrice: formData.originalPrice ? Number(formData.originalPrice) : null,
+        name: String(formData.name).trim(),
+        description: String(formData.description).trim(),
+        price: parseFloat(formData.price) || 0,
+        originalPrice: (formData.originalPrice !== '' && formData.originalPrice !== null) ? parseFloat(formData.originalPrice) : null,
         category: finalCategory || 'Other',
-        images: formData.images,
+        images: Array.isArray(formData.images) ? formData.images.filter(Boolean) : [],
         tags: typeof formData.tags === 'string' ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : formData.tags,
         isWinner: Boolean(formData.isWinner)
       };
       
+      const toastId = toast.loading('Syncing Cloud Data...');
+      
       if (editingId) {
-        await axios.put(`/api/products/${editingId}`, payload);
-        toast.success('System Updated');
+        const response = await axios.put(`/api/products/${editingId}`, payload);
+        if (response.status === 200) {
+          toast.success('Asset Securely Updated', { id: toastId });
+        }
       } else {
-        await axios.post('/api/products', payload);
-        toast.success('Product Published');
+        const response = await axios.post('/api/products', payload);
+        if (response.status === 201) {
+          toast.success('Asset Successfully Published', { id: toastId });
+        }
       }
       
       setIsModalOpen(false);
