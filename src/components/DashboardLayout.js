@@ -18,9 +18,11 @@ import {
     ChevronRight,
     Image as ImageIcon,
     Menu,
-    X,
-    ShoppingBag
+    X
 } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
+
+
 
 const SidebarItem = ({ icon: Icon, label, href, active, badge, onClick }) => (
     <Link 
@@ -134,10 +136,16 @@ export default function DashboardLayout({ children }) {
 
                     <div className="h-8 w-[1px] bg-slate-100 mx-2 hidden sm:block" />
 
-                    <button className="p-2 text-slate-400 hover:bg-slate-50 rounded-xl relative transition-all group">
-                        <ShoppingBag size={22} className="group-hover:text-[#0A66C2]" />
-                        <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#0A66C2] text-white text-[10px] font-black rounded-full border-2 border-white flex items-center justify-center">0</span>
-                    </button>
+                    <a 
+                        href="https://wa.me/917300067345?text=Hi%20SellerYaari,%20I%20need%20support%20with%20my%20dashboard."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 text-slate-400 hover:bg-slate-50 rounded-xl relative transition-all group"
+                    >
+                        <WhatsAppIcon size={22} className="group-hover:text-emerald-500" />
+                    </a>
+
+
                 </div>
             </header>
 

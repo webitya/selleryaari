@@ -1,7 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Search, ShoppingBag, User, Heart } from 'lucide-react';
+import { Menu, X, Search, User } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
+
+
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,11 +64,18 @@ export default function Navbar() {
             <button className="p-2 text-slate-600 hover:bg-slate-50 rounded-xl transition-all">
               <User size={20} />
             </button>
-            <button className="p-2 text-slate-600 hover:bg-slate-50 rounded-xl transition-all relative group">
-                <ShoppingBag size={20} className="group-hover:text-[#F4BC1C]" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#F4BC1C] text-black text-[9px] font-black rounded-full border-2 border-white flex items-center justify-center">0</span>
-            </button>
+            <a 
+              href="https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'm%20interested%20in%20your%20services!" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="px-3 py-2 bg-emerald-50 text-emerald-600 rounded-xl transition-all flex items-center gap-2 group hover:bg-emerald-500 hover:text-white shadow-sm shadow-emerald-100"
+            >
+                <WhatsAppIcon size={16} />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Enquiry Now</span>
+            </a>
+
           </div>
+
           
           <Link href="#contact" className="bg-black hover:bg-[#F4BC1C] hover:text-black text-white px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-black/10 active:scale-95">
             Get Started

@@ -15,6 +15,10 @@ import {
     LayoutDashboard,
     Zap
 } from 'lucide-react';
+import WhatsAppButton from './WhatsAppButton';
+import WhatsAppIcon from './WhatsAppIcon';
+
+
 
 export default function PublicLayout({ children }) {
     const { data: session } = useSession();
@@ -152,10 +156,17 @@ export default function PublicLayout({ children }) {
                             </Link>
                         )}
                         
-                        <Link href="/demo" className="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-all relative group">
-                            <ShoppingBag size={16} className="group-hover:text-[#F4BC1C]" />
-                            <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-[#F4BC1C] text-black text-[8px] font-bold rounded-full border border-white flex items-center justify-center">0</span>
-                        </Link>
+                        <a 
+                            href="https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'm%20interested%20in%20your%20services!" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-lg transition-all flex items-center gap-1.5 group hover:bg-emerald-500 hover:text-white shadow-sm shadow-emerald-100"
+                        >
+                            <WhatsAppIcon size={14} />
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Enquiry Now</span>
+                        </a>
+
+
                     </div>
                 </div>
 
@@ -277,6 +288,8 @@ export default function PublicLayout({ children }) {
                     </div>
                 </div>
             )}
+            <WhatsAppButton />
         </div>
     );
 }
+

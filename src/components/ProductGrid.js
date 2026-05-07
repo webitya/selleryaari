@@ -1,7 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, Star, Heart, ShoppingBag, Zap, Loader2 } from 'lucide-react';
+import { Package, Star, Heart, Zap, Loader2 } from 'lucide-react';
+import WhatsAppIcon from './WhatsAppIcon';
+
+
 
 const ProductCard = ({ name, price, originalPrice, image, tag, category }) => (
     <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-lg hover:shadow-slate-200/40 transition-all duration-300 group cursor-pointer flex flex-col font-inter">
@@ -36,12 +39,28 @@ const ProductCard = ({ name, price, originalPrice, image, tag, category }) => (
             </div>
             <div className="mt-auto pt-2 flex items-center justify-between border-t border-slate-50">
                 <div>
-                    <p className="text-[9px] text-slate-400 line-through font-medium">₹{originalPrice || Math.round(price * 1.5)}</p>
+                    {originalPrice && (
+                        <div className="flex items-center gap-1">
+                            <p className="text-[9px] text-slate-400 line-through font-medium">₹{originalPrice.toLocaleString()}</p>
+                            <span className="text-[9px] font-black text-emerald-500 tracking-tighter">
+                                {Math.round(((originalPrice - price) / originalPrice) * 100)}% OFF
+                            </span>
+                        </div>
+                    )}
                     <p className="text-base font-black text-[#1a1a1a]">₹{price?.toLocaleString()}</p>
                 </div>
-                <button className="bg-[#1a1a1a] hover:bg-[#F4BC1C] hover:text-black text-white w-8 h-8 rounded-lg flex items-center justify-center transition-all active:scale-90">
-                    <ShoppingBag size={14} />
-                </button>
+
+                <a 
+                    href={`https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'm%20interested%20in%20this%20product:%20${encodeURIComponent(name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm shadow-emerald-100"
+                >
+                    <WhatsAppIcon size={12} className="text-white" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Enquiry Now</span>
+                </a>
+
+
             </div>
         </div>
     </div>
@@ -91,10 +110,12 @@ export default function ProductGrid({ limit }) {
             key={product._id}
             name={product.name}
             price={product.price}
+            originalPrice={product.originalPrice}
             category={product.category}
             image={product.images?.[0]}
-            tag={product.tags?.[0] || 'Winner'}
+            tag={product.tags?.[0]}
         />
+
       ))}
     </div>
   );

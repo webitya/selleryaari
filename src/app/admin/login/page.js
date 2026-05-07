@@ -27,7 +27,7 @@ export default function AdminLogin() {
             toast.success('Access Granted!');
             router.push('/admin/dashboard');
         } else {
-            toast.error('Invalid credentials. Please try again.');
+            toast.error(res?.error || 'Invalid credentials. Please try again.');
         }
     } catch (error) {
         toast.error('An unexpected error occurred.');

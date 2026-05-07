@@ -9,7 +9,6 @@ import {
     TrendingUp, 
     Clock,
     TrendingDown,
-    ShoppingBag,
     Zap,
     User as UserIcon
 } from 'lucide-react';
@@ -34,11 +33,12 @@ const StatCard = ({ name, value, icon: Icon, change, color, bg }) => (
 
 export default function Dashboard() {
   const [stats, setStats] = useState([
-    { name: 'Total Leads', value: '0', icon: Users, change: '+0%', color: 'text-blue-500', bg: 'bg-blue-50', key: 'leads' },
-    { name: 'Active Products', value: '0', icon: Package, change: '+0%', color: 'text-emerald-500', bg: 'bg-emerald-50', key: 'products' },
-    { name: 'Total Merchants', value: '0', icon: UserIcon, change: '+0%', color: 'text-[#D4A017]', bg: 'bg-[#FFFBE6]', key: 'users' },
-    { name: 'Conversion Rate', value: '12.5%', icon: TrendingUp, change: '+2.1%', color: 'text-orange-500', bg: 'bg-orange-50', key: 'rate' },
+    { name: 'Total Leads', value: '0', icon: Users, change: '+0%', color: 'text-blue-500', bg: 'bg-blue-50', id: 'leads' },
+    { name: 'Active Products', value: '0', icon: Package, change: '+0%', color: 'text-emerald-500', bg: 'bg-emerald-50', id: 'products' },
+    { name: 'Total Merchants', value: '0', icon: UserIcon, change: '+0%', color: 'text-[#D4A017]', bg: 'bg-[#FFFBE6]', id: 'users' },
+    { name: 'Conversion Rate', value: '12.5%', icon: TrendingUp, change: '+2.1%', color: 'text-orange-500', bg: 'bg-orange-50', id: 'rate' },
   ]);
+
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -50,11 +50,12 @@ export default function Dashboard() {
             ]);
             
             setStats(prev => prev.map(s => {
-                if (s.key === 'leads') return { ...s, value: leads.data.length.toLocaleString() };
-                if (s.key === 'products') return { ...s, value: products.data.length.toLocaleString() };
-                if (s.key === 'users') return { ...s, value: users.data.length.toLocaleString() };
+                if (s.id === 'leads') return { ...s, value: leads.data.length.toLocaleString() };
+                if (s.id === 'products') return { ...s, value: products.data.length.toLocaleString() };
+                if (s.id === 'users') return { ...s, value: users.data.length.toLocaleString() };
                 return s;
             }));
+
         } catch (err) {
             console.error('Failed to fetch stats');
         }
@@ -79,7 +80,7 @@ export default function Dashboard() {
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {stats.map((stat) => (
-          <StatCard key={stat.name} {...stat} />
+          <StatCard key={stat.id} {...stat} />
         ))}
       </div>
 

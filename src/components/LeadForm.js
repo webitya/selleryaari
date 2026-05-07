@@ -3,6 +3,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Send, CheckCircle2, Loader2, Phone, Mail, User, Building, Zap } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import WhatsAppIcon from './WhatsAppIcon';
+
 
 export default function LeadForm() {
   const [loading, setLoading] = useState(false);
@@ -148,11 +150,28 @@ export default function LeadForm() {
               >
                 {loading ? <Loader2 className="animate-spin" size={16} /> : (
                   <>
-                    Send Request
+                    Send Enquiry
                     <Send size={14} />
                   </>
                 )}
               </button>
+
+              <div className="flex items-center gap-3 my-4">
+                <div className="h-px bg-slate-100 flex-1" />
+                <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">OR</span>
+                <div className="h-px bg-slate-100 flex-1" />
+              </div>
+
+              <a 
+                href="https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'd%20like%20to%20book%20a%20consultation."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-emerald-50 text-emerald-600 border border-emerald-100 py-3 rounded-xl font-bold text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all hover:bg-emerald-500 hover:text-white active:scale-[0.98]"
+              >
+                <WhatsAppIcon size={16} />
+                Quick Enquiry via WhatsApp
+              </a>
+
             </form>
           </div>
         </div>

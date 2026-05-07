@@ -15,55 +15,91 @@ import {
     CheckCircle2,
     PlayCircle
 } from 'lucide-react';
+import WhatsAppIcon from '@/components/WhatsAppIcon';
+
+
 import Image from 'next/image';
 import Link from 'next/link';
 import Services from '@/components/Services';
 import Process from '@/components/Process';
 import FAQ from '@/components/FAQ';
 import LeadForm from '@/components/LeadForm';
+import { useEffect } from 'react';
+import axios from 'axios';
+
 
 // --- Sub-components ---
 
-const ProductCard = ({ name, price, originalPrice, rating, tag, category }) => (
-    <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-xl hover:shadow-slate-200/30 transition-all duration-300 group cursor-pointer flex flex-col h-full">
-        <div className="relative aspect-square bg-slate-50 overflow-hidden">
-            <div className="w-full h-full flex items-center justify-center text-slate-200 group-hover:scale-105 transition-transform duration-500">
-                <Zap size={32} className="opacity-10" />
-            </div>
-            {tag && (
-                <div className="absolute top-2 left-2 bg-[#F4BC1C] text-black text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm uppercase tracking-tight z-10">
-                    {tag}
-                </div>
-            )}
-            <button className="absolute top-2 right-2 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 shadow-sm transition-all active:scale-90 z-10">
-                <Heart size={12} />
-            </button>
-            <Link href="/demo" className="absolute bottom-2 left-2 px-1.5 py-0.5 bg-white/90 backdrop-blur-md text-[#1a1a1a] text-[8px] font-bold rounded-full border border-slate-100 uppercase z-10">
-                {category}
-            </Link>
-        </div>
-        <div className="p-2 sm:p-3 flex-1 flex flex-col">
-            <h3 className="text-[11px] sm:text-[12px] font-bold text-[#1a1a1a] line-clamp-2 mb-1 group-hover:text-[#F4BC1C] transition-colors leading-snug">
-                {name}
-            </h3>
-            <div className="flex items-center gap-1 mb-2">
-                <div className="flex items-center text-[#F4BC1C]">
-                    <Star size={8} fill="currentColor" />
-                    <span className="text-[9px] sm:text-[10px] font-bold ml-1 text-slate-400">{rating}</span>
-                </div>
-            </div>
-            <div className="mt-auto pt-2 flex items-center justify-between border-t border-slate-50">
-                <div>
-                    <p className="text-[8px] sm:text-[9px] text-slate-400 line-through font-bold">₹{originalPrice || Math.round(parseInt(price.replace(/,/g, '')) * 1.5)}</p>
-                    <p className="text-[14px] sm:text-base font-bold text-[#1a1a1a]">₹{price}</p>
-                </div>
-                <button className="bg-[#1a1a1a] hover:bg-[#F4BC1C] hover:text-black text-white w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-all active:scale-90 shadow-sm">
-                    <ShoppingBag size={14} />
+const ProductCard = ({ name, price, originalPrice, rating, tag, category, images, isWinner }) => {
+    // Robust image selection: find first non-empty string in array, or check if images itself is a string
+    const displayImage = Array.isArray(images) ? images.find(img => img && img.length > 0) : (typeof images === 'string' ? images : null);
+
+    return (
+        <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-xl hover:shadow-slate-200/30 transition-all duration-300 group cursor-pointer flex flex-col h-full">
+            <div className="relative aspect-square bg-slate-100 overflow-hidden">
+                {displayImage ? (
+                    <img src={displayImage} alt={name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 bg-slate-50/50 group-hover:scale-105 transition-transform duration-500 border-b border-slate-100/50">
+                        <ImageIcon size={32} className="opacity-20 mb-2" />
+                        <span className="text-[8px] font-black uppercase tracking-widest opacity-30">No Media</span>
+                    </div>
+                )}
+                {isWinner && (
+                    <div className="absolute top-2 left-2 bg-black text-[#F4BC1C] text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm uppercase tracking-widest z-10 border border-[#F4BC1C]/20">
+                        WINNER
+                    </div>
+                )}
+                {!isWinner && tag && (
+                    <div className="absolute top-2 left-2 bg-[#F4BC1C] text-black text-[8px] font-bold px-1.5 py-0.5 rounded shadow-sm uppercase tracking-tight z-10">
+                        {tag}
+                    </div>
+                )}
+                <button className="absolute top-2 right-2 w-7 h-7 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 shadow-sm transition-all active:scale-90 z-10">
+                    <Heart size={12} />
                 </button>
+                <div className="absolute bottom-2 left-2 px-1.5 py-0.5 bg-white/90 backdrop-blur-md text-[#1a1a1a] text-[8px] font-bold rounded-full border border-slate-100 uppercase z-10">
+                    {category}
+                </div>
+            </div>
+            <div className="p-2 sm:p-3 flex-1 flex flex-col">
+                <h3 className="text-[11px] sm:text-[12px] font-bold text-[#1a1a1a] line-clamp-2 mb-1 group-hover:text-[#F4BC1C] transition-colors leading-snug">
+                    {name}
+                </h3>
+                <div className="flex items-center gap-1 mb-2">
+                    <div className="flex items-center text-[#F4BC1C]">
+                        <Star size={8} fill="currentColor" />
+                        <span className="text-[9px] sm:text-[10px] font-bold ml-1 text-slate-400">{rating || '4.8'}</span>
+                    </div>
+                </div>
+                <div className="mt-auto pt-2 flex items-center justify-between border-t border-slate-50">
+                    <div>
+                        {originalPrice && (
+                            <div className="flex items-center gap-1.5">
+                                <p className="text-[8px] sm:text-[9px] text-slate-400 line-through font-bold">₹{Number(originalPrice).toLocaleString()}</p>
+                                <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter">
+                                    {Math.round(((Number(originalPrice) - Number(price)) / Number(originalPrice)) * 100)}% OFF
+                                </span>
+                            </div>
+                        )}
+                        <p className="text-[14px] sm:text-base font-bold text-[#1a1a1a]">₹{Number(price).toLocaleString()}</p>
+                    </div>
+
+                    <a 
+                        href={`https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'm%20interested%20in%20this%20product:%20${encodeURIComponent(name)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm shadow-emerald-100"
+                    >
+                        <WhatsAppIcon size={12} className="text-white" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Enquiry Now</span>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
+
 
 const SectionHeader = ({ title, badge }) => (
     <div className="flex items-center justify-between mb-5">
@@ -124,13 +160,37 @@ const TestimonialCard = ({ name, role, content, rating, image }) => (
     </div>
 );
 
+
+
 export default function MarketplaceHome() {
-    const trendingProducts = [
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState(["Home & Kitchen", "Beauty & Makeup", "Electronics", "Fitness"]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get('/api/products');
+                setProducts(res.data);
+                
+                // Dynamic categories from products + static ones
+                const dynamicCats = [...new Set(res.data.map(p => p.category))].filter(Boolean);
+                setCategories(prev => [...new Set([...prev, ...dynamicCats])]);
+            } catch (err) {
+                console.error('Failed to fetch homepage data');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const trendingProducts = products.length > 0 ? products.slice(0, 5) : [
         { name: 'Portable Mini Blender for Smoothies and Shakes', price: '899', rating: '4.8', tag: 'Hot', category: 'Kitchen' },
         { name: 'RGB Wireless Bluetooth Mouse with Silent Clicks', price: '449', rating: '4.6', tag: 'Trending', category: 'Tech' },
-        { name: 'Premium Leather Wallet with RFID Protection', price: '1,299', rating: '4.9', tag: 'Winning', category: 'Fashion' },
-        { name: 'Fast Charging 20W PD Wall Adapter', price: '599', rating: '4.7', tag: 'Pick', category: 'Tech' },
     ];
+
+    const bestSellers = products.length > 5 ? products.slice(5, 10) : products;
 
     return (
         <PublicLayout>
@@ -145,7 +205,7 @@ export default function MarketplaceHome() {
                                 <ChevronRight size={10} className="text-[#F4BC1C]" />
                             </h3>
                             <ul className="space-y-2">
-                                {["Home & Kitchen", "Beauty & Makeup", "Car Accessories", "Fitness & Gym", "Electronics", "Toys & Games", "Fashion", "Pet Supplies"].map((cat, i) => (
+                                {categories.map((cat, i) => (
                                     <li key={i}>
                                         <Link href="/demo" className="flex items-center justify-between text-[11px] font-medium text-slate-600 hover:text-[#F4BC1C] transition-colors group">
                                             {cat}
@@ -154,6 +214,7 @@ export default function MarketplaceHome() {
                                     </li>
                                 ))}
                             </ul>
+
                             <Link href="/demo" className="block w-full mt-6 bg-slate-50 text-slate-400 py-1.5 rounded-lg text-center text-[8px] font-bold uppercase tracking-wider hover:bg-black hover:text-white transition-all">
                                 VIEW ALL
                             </Link>
@@ -216,12 +277,11 @@ export default function MarketplaceHome() {
                     </div>
                 </section>
 
-                {/* --- PRODUCTS SECTIONS --- */}
                 <section id="products" className="max-w-[1440px] mx-auto p-4 lg:px-6 space-y-10">
                     <div>
                         <SectionHeader title="Popular Products" badge="Trending" />
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
-                            {trendingProducts.concat(trendingProducts.slice(0, 1)).map((p, i) => (
+                            {trendingProducts.map((p, i) => (
                                 <ProductCard key={i} {...p} />
                             ))}
                         </div>
@@ -230,12 +290,13 @@ export default function MarketplaceHome() {
                     <div>
                         <SectionHeader title="Best Sellers" badge="Verified" />
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
-                            {trendingProducts.concat(trendingProducts.slice(0, 1)).map((p, i) => (
-                                <ProductCard key={i} {...p} tag="WINNER" category="Tech" />
+                            {bestSellers.map((p, i) => (
+                                <ProductCard key={i} {...p} tag="WINNER" />
                             ))}
                         </div>
                     </div>
                 </section>
+
 
                 <Services />
                 <Process />

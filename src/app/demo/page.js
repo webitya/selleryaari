@@ -1,7 +1,10 @@
 'use client';
 import PublicLayout from '@/components/PublicLayout';
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight, Package, Star, ShoppingBag, Zap, TrendingUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Package, Star, Zap, TrendingUp } from 'lucide-react';
+import WhatsAppIcon from '@/components/WhatsAppIcon';
+
+
 
 const categories = [
     { label: 'Home Essentials', icon: '🏠' },
@@ -49,9 +52,17 @@ const ProductCard = ({ name, price, originalPrice, rating, tag, category }) => (
                     <p className="text-[9px] text-slate-400 line-through font-medium">₹{originalPrice}</p>
                     <p className="text-base font-black text-[#1a1a1a]">₹{price}</p>
                 </div>
-                <button className="bg-[#1a1a1a] hover:bg-[#F4BC1C] hover:text-black text-white w-8 h-8 rounded-lg flex items-center justify-center transition-all active:scale-90">
-                    <ShoppingBag size={14} />
-                </button>
+                <a 
+                    href={`https://wa.me/917300067345?text=Hi%20SellerYaari,%20I'm%20interested%20in%20this%20test%20product:%20${encodeURIComponent(name)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-sm"
+                >
+                    <WhatsAppIcon size={12} className="text-white" />
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Enquiry Now</span>
+                </a>
+
+
             </div>
         </div>
     </div>

@@ -19,27 +19,40 @@ export const authOptions = {
       },
       async authorize(credentials) {
         try {
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error('Please enter both email and password');
+          }
+
           // 1. Check for Admin first (No DB needed)
-          const adminEmail = process.env.ADMIN_EMAIL;
-          const adminPassword = process.env.ADMIN_PASSWORD;
+          const adminEmail = process.env.ADMIN_EMAIL?.trim();
+          const adminPassword = process.env.ADMIN_PASSWORD?.trim();
 
           if (credentials.email === adminEmail && credentials.password === adminPassword) {
+            console.log('Admin login successful');
             return { id: 'admin-id', name: 'Admin', email: adminEmail, role: 'admin' };
           }
 
           // 2. Check for User in DB
           await dbConnect();
-          const user = await User.findOne({ email: credentials.email });
-        if (!user) throw new Error('No user found');
-        if (!user.isVerified) throw new Error('Please verify your email first');
+          const user = await User.findOne({ email: credentials.email.toLowerCase().trim() });
+          
+          if (!user) {
+            throw new Error('No user found with this email');
+          }
+          
+          if (!user.isVerified) {
+            throw new Error('Please verify your email first');
+          }
 
-        const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) throw new Error('Invalid password');
+          const isValid = await bcrypt.compare(credentials.password, user.password);
+          if (!isValid) {
+            throw new Error('Incorrect password');
+          }
 
-        return { id: user._id, name: user.name, email: user.email, role: user.role };
+          return { id: user._id.toString(), name: user.name, email: user.email, role: user.role };
         } catch (error) {
-          console.error('Auth error:', error);
-          return null;
+          console.error('Authorize error:', error.message);
+          throw new Error(error.message); // Throwing error instead of returning null for better feedback
         }
       },
     }),
